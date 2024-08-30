@@ -1,0 +1,9 @@
+.content-area {
+    padding: 20px;
+}
+
+@media (max-width: 768px) {
+    .interaction-panel, .display-area {
+        margin-bottom: 20px;
+    }
+}

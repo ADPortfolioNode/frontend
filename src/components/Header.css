@@ -1,0 +1,26 @@
+.header {
+    width: 100%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    background-image: url('http://localhost:5000/images/generated_image.png');
+    background-size: cover; /* Cover the entire element */
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Prevent repeating */
+}
+.body {
+   
+}
+.navbar-brand {
+    font-weight: bold;
+}
+
+.nav-item {
+    margin-right: 10px;
+    float:left;
+    width:20%
+    
+}
+
+.nav-item.active {
+    background-color: #007bff;
+    color: #fff;
+}

@@ -12,11 +12,11 @@ const Chat = () => {
         setChatHistory(prev => [...prev, { sender: 'User', text: userMessage }]);
 
         try {
-            // Send message to the backend
+            // Send message to the backend (corrected URL to match your Flask endpoint)
             const response = await axios.post('http://localhost:5000/api/chat', {
                 message: userMessage,
             });
-
+            console.log(response.data[0])
             // Add AI response to chat history
             setChatHistory(prev => [...prev, { sender: 'AI', text: response.data.response }]);
         } catch (error) {
@@ -29,8 +29,7 @@ const Chat = () => {
     };
 
     return (
-        <div className="chat-container">
-            <h2>Chat with AI</h2>
+        <div className="container mt-5">            <h2>Chat with AI</h2>
             <div className="chat-window">
                 {chatHistory.map((chat, index) => (
                     <div key={index} className={chat.sender === 'User' ? 'user-message' : 'ai-message'}>
@@ -40,10 +39,10 @@ const Chat = () => {
             </div>
             <input
                 type="text"
-                value={userMessage}
+                prompt={userMessage}
                 onChange={(e) => setUserMessage(e.target.value)}
-                placeholder="Type your message..."
-                onKeyPress={(e) => e.key === 'Enter' ? handleSendMessage() : null}
+                placeholder="Prompt me..."
+                onMouseDown={(e) => e.key === 'Enter' ? handleSendMessage() : null}
             />
             <button onClick={handleSendMessage}>Send</button>
         </div>

@@ -1,0 +1,24 @@
+.navbar {
+    margin-bottom: 20px;
+    
+    width:100%
+}
+
+.nav-item {
+    margin-right: 10px;
+    cursor: pointer;
+    
+ 
+    
+}
+
+.nav-item.active {
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+}
+
+.nav-item:hover {
+    background-color: #0056b3;
+    color: white;
+}
