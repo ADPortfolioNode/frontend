@@ -1,47 +1,85 @@
-.chat-container {
-  max-width: 600px;
-  margin: auto;
+.App {
+  font-family: Arial, sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
   padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #f9f9f9;
+
+/* add background image to page, blurred full screen localhost:5000/images/yinyang.gif */
+background-image: url('http://localhost:5000/images/generated_image.png');
+background-size: cover;
+background-position: center;
+background-attachment: fixed;
+/* add background image to page, blurred full screen localhost:5000/images/yinyang.gif */ 
+}
+header {
+  margin-bottom: 20px;
 }
 
-.chat-window {
-  height: 300px;
-  overflow-y: auto;
-  border: 1px solid #ccc;
-  padding: 10px;
-  margin-bottom: 10px;
-  background-color: #fff;
+nav ul {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
-.user-message {
-  text-align: right;
-  color: blue;
-}
-
-.ai-message {
-  text-align: left;
-  color: green;
-}
-
-input[type="text"] {
-  width: calc(100% - 100px);
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-button {
-  padding: 10px;
+nav button {
+  background-color: #f0f0f0;
   border: none;
-  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+nav button:hover, nav button.active {
   background-color: #007bff;
   color: white;
-  cursor: pointer;
 }
 
-button:hover {
-  background-color: #0056b3;
+main {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+input[type="text"], input[type="file"] {
+  padding: 10px;
+  font-size: 16px;
+}
+
+button[type="submit"] {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button[type="submit"]:hover {
+  background-color: #218838;
+}
+
+button[type="submit"]:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.result {
+  background-color: white;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
 }

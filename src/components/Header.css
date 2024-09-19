@@ -2,25 +2,40 @@
     width: 100%;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
     background-image: url('http://localhost:5000/images/generated_image.png');
-    background-size: cover; /* Cover the entire element */
-    background-position: center; /* Center the image */
-    background-repeat: no-repeat; /* Prevent repeating */
-}
-.body {
-   
-}
-.navbar-brand {
-    font-weight: bold;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    animation: fadeIn 1s ease-in forwards; /* Fade-in effect */
 }
 
 .nav-item {
     margin-right: 10px;
-    float:left;
-    width:20%
-    
+    float: left;
+    width: 20%;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out; /* Transition for fade-in/out */
 }
 
 .nav-item.active {
     background-color: #007bff;
     color: #fff;
+}
+
+.nav-item:hover {
+    opacity: 1; /* Fade-in on hover */
+}
+
+.nav-item:not(:hover) {
+    opacity: 0.7; /* Slightly faded out when not hovered */
+}
+
+/* Keyframes for fade-in effect */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }

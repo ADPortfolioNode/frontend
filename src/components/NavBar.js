@@ -1,46 +1,47 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { Navbar, Nav, Container } from 'react-bootstrap';
+import { setActiveEndpoint } from '../store/actions';
 
-const NavBar = ({ onEndpointChange }) => {
-    return (
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <a className="navbar-brand" href="/">AI App</a>
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav ml-auto">
-            <li className="nav-item">
-                <button className="nav-link btn" onClick={() => onEndpointChange('Home')}>
-                    Home</button>
-            </li>
-            <li className="nav-item">
-                <button className="nav-link btn" onClick={() => onEndpointChange('Chat')}>
-                    Chat</button>
-            </li>
-            <li className="nav-item">
-                <button className="nav-link btn" onClick={() => onEndpointChange('Image-Generation')}>
-                    Image Generation</button>
-            </li>
-            <li className="nav-item">
-                <button className="nav-link btn" onClick={() => onEndpointChange('Image-Editing')}>
-                    Image Editing</button>
-            </li>
-            <li className="nav-item">
-                <button className="nav-link btn" onClick={() => onEndpointChange('Speech-to-Text')}>
-                    Speech to Text</button>
-            </li>
-            <li className="nav-item">
-                <button className="nav-link btn" onClick={() => onEndpointChange('Text-to-Speech')}>
-                    Text to Speech</button>
-            </li>
-            <li className="nav-item">
-                <button className="nav-link btn" onClick={() => onEndpointChange('Video-to-Text')}>
-                    Video to Text</button>
-            </li>
-            </ul>
-        </div>
-        </nav>
-    );
+const endpoints = [
+  { path: '/chat', name: 'Chat' },
+  { path: '/image-generation', name: 'Image Generation' },
+  { path: '/image-editing', name: 'Image Editing' },
+  { path: '/speech-to-text', name: 'Speech to Text' },
+  { path: '/text-to-speech', name: 'Text to Speech' },
+  { path: '/video-to-text', name: 'Video to Text' }
+];
+
+const NavBar = () => {
+  const dispatch = useDispatch();
+
+  const handleNavClick = (endpoint) => {
+    dispatch(setActiveEndpoint(endpoint));
+  };
+
+  return (
+    <Navbar bg="light" expand="lg">
+      <Container>
+        <Navbar.Brand as={NavLink} to="/">Sar~AI</Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="me-auto">
+            {endpoints.map((endpoint) => (
+              <Nav.Link
+                key={endpoint.path}
+                as={NavLink}
+                to={endpoint.path}
+                onClick={() => handleNavClick(endpoint.name)}
+              >
+                {endpoint.name}
+              </Nav.Link>
+            ))}
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
+  );
 };
 
 export default NavBar;

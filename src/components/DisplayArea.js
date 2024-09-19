@@ -14,13 +14,11 @@ const DisplayArea = ({ apiEndpoint }) => {
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
-            setUploadedImage(URL.createObjectURL(file));
+            setUploadedImage(file);
         }
     };
 
     const handleSubmit = async () => {
-        // Call the API with prompt and uploaded image
-        // Note: You would need to handle form data submission and API calls
         try {
             const formData = new FormData();
             formData.append('prompt', prompt);
@@ -43,15 +41,31 @@ const DisplayArea = ({ apiEndpoint }) => {
 
     return (
         <div className="display-area layout-container">
-           
+            <div className="input-area">
+                <textarea
+                    value={prompt}
+                    onChange={handleTextChange}
+                    className="prompt-textarea"
+                    rows="2"
+                    placeholder="Enter your prompt here..."
+                ></textarea>
+                <input
+                    type="file"
+                    onChange={handleImageUpload}
+                    accept="image/*"
+                    className="image-upload-input"
+                />
+                <button onClick={handleSubmit} className="submit-button">Submit</button>
+            </div>
+
             <div className="result-display-area">
-                {aiImageUrl && 
+                {aiImageUrl &&
                     <img src={aiImageUrl} alt="AI Response" className="ai-response-img" />
                 }
-                <textarea 
-                    value={responseText} 
+                <textarea
+                    value={responseText}
                     readOnly
-                    className="response-textarea" 
+                    className="response-textarea"
                     rows="4"
                     placeholder="AI response will be displayed here..."
                 ></textarea>

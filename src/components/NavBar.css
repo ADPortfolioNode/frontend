@@ -1,9 +1,14 @@
 .navbar {
     margin-bottom: 20px;
-    
-    width:100%
+    justify-content:flex-space;
+    width:100%;
+    position:relative;
 }
-
+.nav-item .nav-link.active {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
 .nav-item {
     margin-right: 10px;
     cursor: pointer;
