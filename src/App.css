@@ -1,16 +1,15 @@
+/* Mobile-first styles */
 .App {
   font-family: Arial, sans-serif;
-  max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-
-/* add background image to page, blurred full screen localhost:5000/images/yinyang.gif */
-background-image: url('http://localhost:5000/images/generated_image.png');
-background-size: cover;
-background-position: center;
-background-attachment: fixed;
-/* add background image to page, blurred full screen localhost:5000/images/yinyang.gif */ 
+  background-image: url('http://localhost:5000/images/generated_image.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  animation: fadeIn 1.765s ease-in-out;
 }
+
 header {
   margin-bottom: 20px;
 }
@@ -19,7 +18,7 @@ nav ul {
   list-style-type: none;
   padding: 0;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 10px;
 }
 
@@ -28,7 +27,7 @@ nav button {
   border: none;
   padding: 10px 15px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 1.765s;
 }
 
 nav button:hover, nav button.active {
@@ -40,6 +39,14 @@ main {
   background-color: #f9f9f9;
   padding: 20px;
   border-radius: 5px;
+  animation: slideInFromLeft 1.765s ease-in-out, fadeIn 1.765s ease-in-out;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.form-container, .media-container {
+  width: 100%;
 }
 
 form {
@@ -52,6 +59,7 @@ form {
 input[type="text"], input[type="file"] {
   padding: 10px;
   font-size: 16px;
+  width: 100%;
 }
 
 button[type="submit"] {
@@ -60,7 +68,7 @@ button[type="submit"] {
   border: none;
   padding: 10px 15px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 1.765s;
 }
 
 button[type="submit"]:hover {
@@ -77,9 +85,86 @@ button[type="submit"]:disabled {
   padding: 15px;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  animation: fadeIn 1.765s ease-in-out;
+  display: none; /* Hide by default */
+}
+
+.result.show {
+  display: block; /* Show when response is received */
 }
 
 img {
   max-width: 100%;
   height: auto;
+}
+
+/* Keyframes for animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Media queries for larger screens */
+@media (min-width: 576px) {
+  .App {
+    max-width: 540px;
+  }
+}
+
+@media (min-width: 768px) {
+  .App {
+    max-width: 720px;
+  }
+
+  nav ul {
+    flex-direction: row;
+  }
+
+  main {
+    grid-template-columns: 1fr 1fr; /* Two equal columns */
+  }
+
+  .form-container {
+    grid-column: 1 / 2;
+  }
+
+  .media-container {
+    grid-column: 2 / 3;
+  }
+}
+
+@media (min-width: 992px) {
+  .App {
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .App {
+    max-width: 1140px;
+  }
 }

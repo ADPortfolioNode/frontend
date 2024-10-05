@@ -109,10 +109,10 @@ function App() {
         </div>
       </nav>
       <main className="row">
-        <div className="col-4">
+        <div >
           <InteractivePanel activeEndpoint={activeTab} handleSubmit={handleSubmit} input={input} setInput={setInput} file={file} setFile={setFile} loading={loading} />
         </div>
-        <div className="col-8">
+        <div>
           <MediaDisplay response={response} isLoading={loading} error={error} />
         </div>
       </main>
