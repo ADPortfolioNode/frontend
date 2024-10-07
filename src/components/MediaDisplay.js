@@ -26,8 +26,8 @@ const MediaDisplay = ({ response = {}, isLoading, error = '' }) => {
 
   const renderMedia = () => {
     if (typeof displayMediaUrl !== 'string') {
-      return null;
-    }
+      return<div className="text-center">Invalid media URL</div>;
+     }
 
     if (displayMediaUrl.endsWith('.mp3')) {
       return (
@@ -55,7 +55,7 @@ const MediaDisplay = ({ response = {}, isLoading, error = '' }) => {
     } else {
       return (
         <Alert variant="warning">
-          Unsupported type. <a href={displayMediaUrl} target="_blank" rel="noopener noreferrer">Click here</a> to view the file.
+          Unsupported type. Hit<a href={displayMediaUrl} target="_blank" rel="noopener noreferrer">{displayMediaUrl}</a> to view the file.
         </Alert>
       );
     }
@@ -77,7 +77,16 @@ const MediaDisplay = ({ response = {}, isLoading, error = '' }) => {
           </Alert>
         )}
         {displayMessage && !isLoading && !error && (
-          <Card.Text className={`response-text ${displayMessage ? 'visible' : ''}`}>{displayMessage}</Card.Text>
+          <Card.Text className={`response-text ${displayMessage  || displayMessage.endsWith('.vtt') ? 'visible' : ''}`}>
+            <span className="typist">
+              {displayMessage.split('\n').map((text, index) => (
+                <React.Fragment key={index}>
+                  {text}
+                  <br />
+                </React.Fragment>
+              ))}
+            </span>
+          </Card.Text>
         )}
         {displayMediaUrl && !isLoading && !error && (
           <div className="media-container mt-4">

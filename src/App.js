@@ -46,7 +46,7 @@ function App() {
           break;
         case 'imgEdit':
           res = await axios.post('http://localhost:5000/api/imgEdit', formData);
-          setResponse({ message: '', mediaUrl: res.data.saved_path });
+          setResponse({ message: 'Your edited image', mediaUrl: res.data.saved_path });
           break;
         case 'imgVariation':
           res = await axios.post('http://localhost:5000/api/imgVariation', formData);
@@ -60,6 +60,7 @@ function App() {
           res = await axios.post('http://localhost:5000/api/vtt', formData);
           setResponse({ message: res.data.message, mediaUrl: res.data.file_path });
           break;
+        
         default:
           setResponse({ message: 'Invalid operation', mediaUrl: '' });
       }
@@ -81,35 +82,35 @@ function App() {
       <nav className="row">
         <div className="col-12">
           <ul className="nav nav-pills flex space justify">
-            <li className="nav-item">
-              <button onClick={() => setActiveTab('imggen')} className={`nav-link ${activeTab === 'imggen' ? 'active' : ''}`}>Image Generation</button>
+            <li className="nav-item dropdown">
+              <button className={`nav-link dropdown-toggle ${['imggen', 'imgEdit', 'imgVariation'].includes(activeTab) ? 'active' : ''}`} data-toggle="dropdown">
+                Image Operations
+              </button>
+              <div className="dropdown-menu">
+                <button onClick={() => setActiveTab('imggen')} className={`dropdown-item ${activeTab === 'imggen' ? 'active' : ''}`}>Image Generation</button>
+                <button onClick={() => setActiveTab('imgEdit')} className={`dropdown-item ${activeTab === 'imgEdit' ? 'active' : ''}`}>Image Edit</button>
+                <button onClick={() => setActiveTab('imgVariation')} className={`dropdown-item ${activeTab === 'imgVariation' ? 'active' : ''}`}>Image Variation</button>
+              </div>
             </li>
-            <li className="nav-item">
-              <button onClick={() => setActiveTab('imgEdit')} className={`nav-link ${activeTab === 'imgEdit' ? 'active' : ''}`}>Image Edit</button>
+            <li className="nav-item dropdown">
+              <button className={`nav-link dropdown-toggle ${['chat', 'tts', 'transcribe', 'translate', 'vtt'].includes(activeTab) ? 'active' : ''}`} data-toggle="dropdown">
+                Text Operations
+              </button>
+              <div className="dropdown-menu">
+                <button onClick={() => setActiveTab('chat')} className={`dropdown-item ${activeTab === 'chat' ? 'active' : ''}`}>Chat</button>
+                <button onClick={() => setActiveTab('tts')} className={`dropdown-item ${activeTab === 'tts' ? 'active' : ''}`}>Text to Speech</button>
+                <button onClick={() => setActiveTab('transcribe')} className={`dropdown-item ${activeTab === 'transcribe' ? 'active' : ''}`}>Transcribe</button>
+                <button onClick={() => setActiveTab('translate')} className={`dropdown-item ${activeTab === 'translate' ? 'active' : ''}`}>Translate</button>
+                <button onClick={() => setActiveTab('vtt')} className={`dropdown-item ${activeTab === 'vtt' ? 'active' : ''}`}>VTT Generation</button>
+              </div>
             </li>
-            <li className="nav-item">
-              <button onClick={() => setActiveTab('imgVariation')} className={`nav-link ${activeTab === 'imgVariation' ? 'active' : ''}`}>Image Variation</button>
-            </li>
-            <li className="nav-item">
-              <button onClick={() => setActiveTab('chat')} className={`nav-link ${activeTab === 'chat' ? 'active' : ''}`}>Chat</button>
-            </li>
-            <li className="nav-item">
-              <button onClick={() => setActiveTab('tts')} className={`nav-link ${activeTab === 'tts' ? 'active' : ''}`}>Text to Speech</button>
-            </li>
-            <li className="nav-item">
-              <button onClick={() => setActiveTab('transcribe')} className={`nav-link ${activeTab === 'transcribe' ? 'active' : ''}`}>Transcribe</button>
-            </li>
-            <li className="nav-item">
-              <button onClick={() => setActiveTab('translate')} className={`nav-link ${activeTab === 'translate' ? 'active' : ''}`}>Translate</button>
-            </li>
-            <li className="nav-item">
-              <button onClick={() => setActiveTab('vtt')} className={`nav-link ${activeTab === 'vtt' ? 'active' : ''}`}>VTT Generation</button>
-            </li>
+             
+               
           </ul>
         </div>
       </nav>
       <main className="row">
-        <div >
+        <div>
           <InteractivePanel activeEndpoint={activeTab} handleSubmit={handleSubmit} input={input} setInput={setInput} file={file} setFile={setFile} loading={loading} />
         </div>
         <div>

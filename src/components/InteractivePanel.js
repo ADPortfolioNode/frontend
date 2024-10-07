@@ -19,7 +19,7 @@ const InteractivePanel = ({ activeEndpoint, handleSubmit, input, setInput, file,
               />
             </Form.Group>
           )}
-          {['transcribe', 'translate', 'imgEdit', 'imgVariation'].includes(activeEndpoint) && (
+          {['transcribe', 'translate', 'imgEdit', 'imgVariation', 'vtt'].includes(activeEndpoint) && (
             <Form.Group controlId="formFile">
               <Form.Label>File</Form.Label>
               <Form.Control

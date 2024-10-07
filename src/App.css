@@ -1,17 +1,26 @@
+/* Reset styles */ 
 /* Mobile-first styles */
+body {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  background-image: url('http://localhost:3000/images/yinyang.png');
+  margin: 0; 
+ }
+
 .App {
-  font-family: Arial, sans-serif;
   margin: 0 auto;
   padding: 20px;
-  background-image: url('http://localhost:5000/images/generated_image.png');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  animation: fadeIn 1.765s ease-in-out;
+  max-width: 100%;
+  background-color: transparent; /* Use background color from body */
 }
 
+/* Header styles */
 header {
-  margin-bottom: 20px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+header h1 {
+  text-shadow: 10px 10px 10px rgb(102, 102, 102);
 }
 
 nav ul {
@@ -23,56 +32,68 @@ nav ul {
 }
 
 nav button {
-  background-color: #f0f0f0;
+  background-color: #333333; /* Dark button background */
   border: none;
-  padding: 10px 15px;
+  padding: 15px 20px;
+  border-radius: 5px; /* Rounded corners */
   cursor: pointer;
-  transition: background-color 1.765s;
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Faster transitions */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  color: #E0E0E0; /* Light text color */
 }
 
-nav button:hover, nav button.active {
+nav button:hover {
   background-color: #007bff;
   color: white;
+  transform: scale(1.05); /* Slightly increase size on hover */
 }
 
+/* Main content styles */
 main {
-  background-color: #f9f9f9;
-  padding: 20px;
-  border-radius: 5px;
-  animation: slideInFromLeft 1.765s ease-in-out, fadeIn 1.765s ease-in-out;
+  background-color: rgba(33, 33, 33, 0.9); /* Semi-transparent dark */
+  padding: 30px;
+  border-radius: 10px;
+  animation: slideInFromLeft 0.7s ease-in-out;
   display: grid;
   grid-template-columns: 1fr;
   gap: 20px;
 }
 
-.form-container, .media-container {
+.form-container,
+.media-container {
   width: 100%;
+  margin: 0 auto;
 }
 
 form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px;
   margin-bottom: 20px;
 }
 
-input[type="text"], input[type="file"] {
-  padding: 10px;
+input[type="text"],
+input[type="file"],
+button[type="submit"] {
+  padding: 15px; /* Increased padding for a modern touch */
   font-size: 16px;
-  width: 100%;
+  border: 2px solid #424242; /* Dark border */
+  border-radius: 5px;
+  background-color: #333333; /* Dark input background */
+  color: #E0E0E0; /* Light text color */
 }
 
 button[type="submit"] {
   background-color: #28a745;
   color: white;
   border: none;
-  padding: 10px 15px;
   cursor: pointer;
-  transition: background-color 1.765s;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 button[type="submit"]:hover {
   background-color: #218838;
+  transform: scale(1.05);
 }
 
 button[type="submit"]:disabled {
@@ -81,11 +102,11 @@ button[type="submit"]:disabled {
 }
 
 .result {
-  background-color: white;
-  padding: 15px;
+  background-color: #1E1E1E; /* Dark result background */
+  padding: 20px;
   border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  animation: fadeIn 1.765s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.7s ease-in-out;
   display: none; /* Hide by default */
 }
 
@@ -93,9 +114,32 @@ button[type="submit"]:disabled {
   display: block; /* Show when response is received */
 }
 
+/* Image styles */
 img {
   max-width: 100%;
   height: auto;
+  border-radius: 5px; /* Rounded corners for images */
+}
+
+/* Typist styles */
+.typist {
+  margin: 20px 0;
+}
+
+/* Typography styles */
+.typist h1,
+.typist h2,
+.typist h3,
+.typist h4,
+.typist h5,
+.typist h6 {
+  font-family: 'Georgia', serif;
+  margin-top: 30px;
+  margin-bottom: 15px;
+}
+
+.typist p {
+  margin-bottom: 15px;
 }
 
 /* Keyframes for animations */
@@ -105,15 +149,6 @@ img {
   }
   to {
     opacity: 1;
-  }
-}
-
-@keyframes fadeOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
   }
 }
 
@@ -139,21 +174,13 @@ img {
   .App {
     max-width: 720px;
   }
-
   nav ul {
     flex-direction: row;
+    justify-content: space-between; /* Evenly space navigation items */
   }
-
   main {
     grid-template-columns: 1fr 1fr; /* Two equal columns */
-  }
-
-  .form-container {
-    grid-column: 1 / 2;
-  }
-
-  .media-container {
-    grid-column: 2 / 3;
+    padding: 40px; /* Increased padding */
   }
 }
 
