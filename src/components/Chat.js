@@ -1,9 +1,26 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios'; // Add this line
 
-const Chat = () => {
+const ChatArea = ({ chatHistory }) => {
+    return (
+        <div className="chat-area">
+            <h4>Chat</h4>
+            {chatHistory.map((chat, index) => (
+                <div key={index} className={chat.sender === 'User' ? 'user-message' : 'ai-message'}>
+                    <strong>{chat.sender}:</strong> {chat.text}
+                </div>
+            ))}
+        </div>
+    );
+};
+
+const Chat = ({ chatHistory, setChatHistory }) => {
     const [userMessage, setUserMessage] = useState('');
-    const [chatHistory, setChatHistory] = useState([]);
+
+    useEffect(() => {
+        // Listen for state changes and update component state
+        // Example: setState(globalState);
+    }, []);
 
     const handleSendMessage = async () => {
         if (!userMessage.trim()) return;
@@ -31,13 +48,7 @@ const Chat = () => {
     return (
         <div className="chat-container">
             <h2>Chat with AI</h2>
-            <div className="chat-window">
-                {chatHistory.map((chat, index) => (
-                    <div key={index} className={chat.sender === 'User' ? 'user-message' : 'ai-message'}>
-                        <strong>{chat.sender}:</strong> {chat.text}
-                    </div>
-                ))}
-            </div>
+            <ChatArea chatHistory={chatHistory} />
             <input
                 type="text"
                 value={userMessage}

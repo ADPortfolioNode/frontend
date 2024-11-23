@@ -1,23 +1,17 @@
 import React, { useState } from 'react';
-import './Header.css'
+import './Header.css';
 
 const Header = () => {
-    const [activeEndpoint] = useState('Home'); // Set initial endpoint based on the prop
-    const [message, ] = useState('hello Ai');
-    const [file, ] = useState(null);
-    const [response, ] = useState('')
+  const [isVisible, setIsVisible] = useState(true);
 
-
-    return (
-        <header className=".header">
-            <nav className="">
-                <a  href="/">AI App</a>
-                <div className="navbar-nav">
-                    <p>{file}<br/>{activeEndpoint}<br /></p>
-                </div>
-            </nav>
-        </header>
-    );
+  return (
+    isVisible && (
+      <div className="header">
+        <img src="http://localhost:5000/images/yinyang.gif" alt="Logo" className="logo" />
+        <h1 className="site-title">AI App</h1>
+      </div>
+    )
+  );
 };
 
 export default Header;

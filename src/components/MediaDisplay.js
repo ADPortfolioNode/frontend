@@ -1,108 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import { Card, Spinner, Alert } from 'react-bootstrap';
+import React from 'react';
 import PropTypes from 'prop-types';
-import './MediaDisplay.css'; // Import the CSS file for transitions
 
-const MediaDisplay = ({ response = {}, isLoading, error = '' }) => {
-  const { message, mediaUrl } = response;
-  const [displayMessage, setDisplayMessage] = useState('');
-  const [displayMediaUrl, setDisplayMediaUrl] = useState('');
-  const [mediaError, setMediaError] = useState(false);
+const MediaDisplay = ({ response, isLoading, error }) => {
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-  useEffect(() => {
-    setDisplayMessage(message || '');
-    setDisplayMediaUrl(mediaUrl || '');
-    setMediaError(false);
-  }, [message, mediaUrl]);
+  if (error) {
+    return <div className="alert alert-danger">{error}</div>;
+  }
 
-  const handleMediaError = (e) => {
-    if (!mediaError) {
-      console.error('Media failed to load:', displayMediaUrl);
-      setMediaError(true);
-      e.target.onerror = null; // Prevent infinite loop
-      e.target.src = 'http://localhost:5000/images/yinyang.png'; // Provide a fallback image
-    }
-  };
-
-  const renderMedia = () => {
-    if (typeof displayMediaUrl !== 'string') {
-      return<div className="text-center">Invalid media URL</div>;
-     }
-
-    if (displayMediaUrl.endsWith('.mp3')) {
-      return (
-        <audio controls className="w-100 visible">
-          <source src={displayMediaUrl} type="audio/mpeg" />
-          Your browser does not support the audio element.
-        </audio>
-      );
-    } else if (displayMediaUrl.endsWith('.mp4')) {
-      return (
-        <video controls className="w-100 visible">
-          <source src={displayMediaUrl} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-      );
-    } else if (displayMediaUrl.match(/\.(jpeg|jpg|gif|png)$/)) {
-      return (
-        <img
-          src={displayMediaUrl}
-          alt="Generated content"
-          className="img-fluid rounded visible"
-          onError={handleMediaError}
-        />
-      );
-    } else {
-      return (
-        <Alert variant="warning">
-          Unsupported type. Hit<a href={displayMediaUrl} target="_blank" rel="noopener noreferrer">{displayMediaUrl}</a> to view the file.
-        </Alert>
-      );
-    }
-  };
+  if (response.mediaUrl) {
+    return (
+      <div>
+        <h3>Response</h3>
+        <p>{response.message}</p>
+        <img src={response.mediaUrl} alt="Generated content" className="img-fluid" />
+      </div>
+    );
+  }
 
   return (
-    <Card className={`shadow-sm h-100 ${!displayMessage && !displayMediaUrl && !isLoading && !error ? 'hidden' : ''}`}>
-      <Card.Body>
-        <Card.Title className="text-center mb-4">Result</Card.Title>
-        {isLoading && (
-          <div className="text-center my-5">
-            <Spinner animation="border" variant="primary" />
-            <p className="mt-3">Processing your request...</p>
-          </div>
-        )}
-        {error && !isLoading && (
-          <Alert variant="danger">
-            <strong>Error:</strong> {error}{mediaError && ' (Media failed to load)'}
-          </Alert>
-        )}
-        {displayMessage && !isLoading && !error && (
-          <Card.Text className={`response-text ${displayMessage  || displayMessage.endsWith('.vtt') ? 'visible' : ''}`}>
-            <span className="typist">
-              {displayMessage.split('\n').map((text, index) => (
-                <React.Fragment key={index}>
-                  {text}
-                  <br />
-                </React.Fragment>
-              ))}
-            </span>
-          </Card.Text>
-        )}
-        {displayMediaUrl && !isLoading && !error && (
-          <div className="media-container mt-4">
-            {renderMedia()}
-          </div>
-        )}
-      </Card.Body>
-    </Card>
+    <div>
+      <h3>Response</h3>
+      <p>{response.message}</p>
+    </div>
   );
 };
 
 MediaDisplay.propTypes = {
-  response: PropTypes.shape({
-    message: PropTypes.string,
-    mediaUrl: PropTypes.string,
-  }),
+  response: PropTypes.object.isRequired,
   isLoading: PropTypes.bool.isRequired,
   error: PropTypes.string,
 };

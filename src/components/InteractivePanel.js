@@ -1,61 +1,107 @@
-import React from 'react';
-import { Card, Form, Button } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '../styles/InteractivePanel.css';
 
-const InteractivePanel = ({ activeEndpoint, handleSubmit, input, setInput, file, setFile, loading }) => {
+const InteractivePanel = ({ selectedEndpoint, socket, loading, setLoading, setResponse }) => {
+  const [formInputs, setFormInputs] = useState({});
+  const [formValues, setFormValues] = useState({});
+
+  useEffect(() => {
+    if (selectedEndpoint && selectedEndpoint.form_inputs) {
+      setFormInputs(selectedEndpoint.form_inputs);
+      
+      const initialFormValues = Object.keys(selectedEndpoint.form_inputs).reduce((acc, key) => {
+        acc[key] = '';
+        return acc;
+      }, {});
+      initialFormValues.model = selectedEndpoint.model; // Set the model value
+      setFormValues(initialFormValues);
+    }
+  }, [selectedEndpoint]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues({ ...formValues, [name]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (socket && formInputs) {
+      setLoading(true);
+      socket.emit('submitTask', { endpoint: selectedEndpoint.endpoint, data: formValues }, (response) => {
+        setResponse(response); // Raise the response to the state
+        setLoading(false);
+      });
+    }
+  };
+
+  if (!formInputs || Object.keys(formInputs).length === 0) {
+    return <p>Please select an endpoint from the navigation menu.</p>;
+  }
+  console.log('InteractivePanel Selected Endpoint:', selectedEndpoint); // Log the selected endpoint for debugging
+
+  const getLabel = (key) => {
+    switch (key) {
+      case 'prompt':
+        return 'Prompt';
+      case 'file':
+        return 'File';
+      case 'image':
+        return 'Image File';
+      case 'video':
+        return 'Video File';
+      case 'number':
+        return 'Number of Images';
+      case 'model':
+        return 'Model';
+      default:
+        return key;
+    }
+  };
+
   return (
-    <Card className="shadow-sm h-100">
-      <Card.Body>
-        <Card.Title className="text-center mb-4">{activeEndpoint.charAt(0).toUpperCase() + activeEndpoint.slice(1)}</Card.Title>
-        <Form onSubmit={handleSubmit}>
-          {['chat', 'tts', 'imggen'].includes(activeEndpoint) && (
-            <Form.Group controlId="formInput">
-              <Form.Label>Input</Form.Label>
-              <Form.Control
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Enter your message or prompt"
+    <div className="interactive-panel">
+      {selectedEndpoint.description && <h2>{selectedEndpoint.description}</h2>}
+      <form onSubmit={handleSubmit}>
+        {Object.keys(formInputs).map((key, index) => (
+          <div key={index} className="form-group">
+            <label>{getLabel(key)}</label>
+            {key === 'model' ? (
+              <select
+                name={key}
+                value={formValues[key]}
+                onChange={handleInputChange}
+                className="form-control"
+                disabled
+              >
+                <option value={selectedEndpoint.model}>{selectedEndpoint.model}</option>
+              </select>
+            ) : (
+              <input
+                type={formInputs[key]}
+                name={key}
+                value={formValues[key] || ''}
+                onChange={handleInputChange}
+                className="form-control"
               />
-            </Form.Group>
-          )}
-          {['transcribe', 'translate', 'imgEdit', 'imgVariation', 'vtt'].includes(activeEndpoint) && (
-            <Form.Group controlId="formFile">
-              <Form.Label>File</Form.Label>
-              <Form.Control
-                type="file"
-                onChange={(e) => setFile(e.target.files[0])}
-              />
-            </Form.Group>
-          )}
-          {activeEndpoint === 'imgEdit' && (
-            <Form.Group controlId="formEditInstructions">
-              <Form.Label>Edit Instructions</Form.Label>
-              <Form.Control
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Enter edit instructions"
-              />
-            </Form.Group>
-          )}
-          <Button variant="primary" type="submit" disabled={loading}>
-            {loading ? 'Processing...' : 'Submit'}
-          </Button>
-        </Form>
-      </Card.Body>
-    </Card>
+            )}
+          </div>
+        ))}
+        <button type="submit" className="btn btn-primary" disabled={loading}>
+          {loading ? 'Loading...' : 'Submit'}
+        </button>
+      </form>
+    </div>
   );
 };
 
 InteractivePanel.propTypes = {
-  activeEndpoint: PropTypes.string.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
-  input: PropTypes.string.isRequired,
-  setInput: PropTypes.func.isRequired,
-  file: PropTypes.object,
-  setFile: PropTypes.func.isRequired,
+  selectedEndpoint: PropTypes.object,
+  socket: PropTypes.object,
   loading: PropTypes.bool.isRequired,
+  setLoading: PropTypes.func.isRequired,
+  setResponse: PropTypes.func.isRequired, // Add setResponse prop type
 };
 
 export default InteractivePanel;

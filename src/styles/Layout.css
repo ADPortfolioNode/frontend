@@ -1,0 +1,21 @@
+
+.layout-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.display-area, .chat-area {
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .display-area, .chat-area {
+    margin-top: 10px;
+  }
+}

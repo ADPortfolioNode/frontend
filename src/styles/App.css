@@ -1,0 +1,286 @@
+/* General styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+  margin: 0;
+  padding: 0;
+  transition: background-color 1.74s ease;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.container-fluid {
+  padding: 0 15px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -15px;
+}
+
+.col-12, .col-md-6, .col-lg-4, .col-lg-8 {
+  padding: 0 15px;
+}
+
+.mb-4 {
+  margin-bottom: 1.5rem;
+}
+
+/* Header styles */
+header {
+  background-color: #343a40;
+  color: white;
+  padding: 10px 0;
+  text-align: center;
+  transition: background-color 1.74s ease;
+}
+
+/* Navigation styles */
+.navbar {
+  margin-bottom: 20px;
+  transition: margin-bottom 1.74s ease;
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+}
+
+.navbar-nav .nav-item .nav-link {
+  color: #343a40;
+  transition: color 1.74s ease;
+}
+
+.navbar-nav .nav-item .nav-link:hover {
+  color: #007bff;
+}
+
+.dropdown-menu {
+  transition: opacity 1.74s ease;
+}
+
+/* StatusTiles styles */
+.card {
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: fadeIn 1.74s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card-body {
+  text-align: center;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  margin-bottom: 10px;
+}
+
+.status-indicator {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.status-indicator.red {
+  background-color: red;
+}
+
+.status-indicator.amber {
+  background-color: amber;
+}
+
+.status-indicator.green {
+  background-color: green;
+}
+
+/* Form styles */
+form {
+  margin-top: 20px;
+  animation: slideIn 1.74s ease-in-out;
+}
+
+form input[type="text"],
+form input[type="file"] {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  transition: border-color 1.74s ease;
+}
+
+form button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 1.74s ease, transform 1.74s ease;
+}
+
+form button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+form button:hover:not(:disabled) {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+/* Response styles */
+p {
+  margin-top: 10px;
+  color: #343a40;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .col-12 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .col-md-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .col-lg-4 {
+    flex: 0 0 33.3333%;
+    max-width: 33.3333%;
+  }
+  .col-lg-8 {
+    flex: 0 0 66.6667%;
+    max-width: 66.6667%;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .col-lg-4 {
+    flex: 0 0 33.3333%;
+    max-width: 33.3333%;
+  }
+  .col-lg-8 {
+    flex: 0 0 66.6667%;
+    max-width: 66.6667%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .col-lg-4 {
+    flex: 0 0 33.3333%;
+    max-width: 33.3333%;
+  }
+  .col-lg-8 {
+    flex: 0 0 66.6667%;
+    max-width: 66.6667%;
+  }
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.app-header {
+  background-color: #343a40;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+.app-nav {
+  background-color: #f8f9fa;
+  padding: 10px;
+}
+
+.app-nav ul {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.app-nav li {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #e9ecef;
+  border-radius: 4px;
+}
+
+.app-nav li:hover {
+  background-color: #d6d8db;
+}
+
+.app-main {
+  display: flex;
+  flex: 1;
+  padding: 20px;
+  gap: 20px;
+  flex-direction: column;
+  align-items: center;
+}
+
+.interactive-panel-container,
+.display-area-container {
+  width: 100%;
+  max-width: 600px;
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+}
+
+@media (max-width: 575.98px) {
+  .app-main {
+    padding: 10px;
+  }
+}

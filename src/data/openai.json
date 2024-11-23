@@ -1,0 +1,354 @@
+{
+  "openai_api": {
+    "models": {
+      "list_available_models": {
+        "method": "GET",
+        "endpoint": "/v1/models",
+        "description": "List available models",
+        "form_inputs": {}
+      },
+      "retrieve_model_information": {
+        "method": "GET",
+        "endpoint": "/v1/models/{model}",
+        "description": "Retrieve model information",
+        "form_inputs": {
+          "model": "string"
+        }
+      }
+    },
+    "completions": {
+      "create_completion": {
+        "method": "POST",
+        "endpoint": "/v1/completions",
+        "description": "Create a completion",
+        "form_inputs": {
+          "model": "string",
+          "prompt": "string",
+          "max_tokens": "integer",
+          "temperature": "float"
+        }
+      }
+    },
+    "chat": {
+      "create_chat_completion": {
+        "method": "POST",
+        "endpoint": "/v1/chat/completions",
+        "description": "Create a chat completion",
+        "form_inputs": {
+          "model": "string",
+          "messages": "array",
+          "max_tokens": "integer",
+          "temperature": "float"
+        }
+      }
+    },
+    "edits": {
+      "create_edit": {
+        "method": "POST",
+        "endpoint": "/v1/edits",
+        "description": "Create an edit",
+        "form_inputs": {
+          "model": "string",
+          "input": "string",
+          "instruction": "string"
+        }
+      }
+    },
+    "images": {
+      "create_image": {
+        "method": "POST",
+        "endpoint": "/v1/images/generations",
+        "description": "Create an image",
+        "form_inputs": {
+          "prompt": "string",
+          "n": "integer",
+          "size": "string"
+        }
+      },
+      "create_edited_image": {
+        "method": "POST",
+        "endpoint": "/v1/images/edits",
+        "description": "Create an edited or extended image",
+        "form_inputs": {
+          "image": "file",
+          "mask": "file",
+          "prompt": "string"
+        }
+      },
+      "create_image_variations": {
+        "method": "POST",
+        "endpoint": "/v1/images/variations",
+        "description": "Create image variations",
+        "form_inputs": {
+          "image": "file",
+          "n": "integer",
+          "size": "string"
+        }
+      },
+      "create_image_animation": {
+        "method": "POST",
+        "endpoint": "/v1/images/animations",
+        "description": "Create an image animation",
+        "form_inputs": {
+          "prompt": "string",
+          "n": "integer",
+          "size": "string",
+          "duration": "integer"
+        }
+      },
+      "retrieve_image_animation_information": {
+        "method": "POST",
+        "endpoint": "/v1/images/animations/{animation_id}",
+        "description": "Retrieve image animation information",
+        "form_inputs": {
+          "animation_id": "string"
+        }
+      },
+      "delete_image_animation": {
+        "method": "DELETE",
+        "endpoint": "/v1/images/animations/{animation_id}",
+        "description": "Delete an image animation",
+        "form_inputs": {
+          "animation_id": "string"
+        }
+      }
+    },
+    "embeddings": {
+      "create_embeddings": {
+        "method": "POST",
+        "endpoint": "/v1/embeddings",
+        "description": "Create embeddings",
+        "form_inputs": {
+          "model": "string",
+          "input": "string"
+        }
+      }
+    },
+    "audio": {
+      "create_transcription": {
+        "method": "POST",
+        "endpoint": "/v1/audio/transcriptions",
+        "description": "Create transcription",
+        "form_inputs": {
+          "file": "file",
+          "model": "string"
+        }
+      },
+      "create_translation": {
+        "method": "POST",
+        "endpoint": "/v1/audio/translations",
+        "description": "Create translation",
+        "form_inputs": {
+          "file": "file",
+          "model": "string"
+        }
+      }
+    },
+    "files": {
+      "list_files": {
+        "method": "GET",
+        "endpoint": "/v1/files",
+        "description": "List files",
+        "form_inputs": {}
+      },
+      "upload_file": {
+        "method": "POST",
+        "endpoint": "/v1/files",
+        "description": "Upload a file",
+        "form_inputs": {
+          "file": "file",
+          "purpose": "string"
+        }
+      },
+      "delete_file": {
+        "method": "DELETE",
+        "endpoint": "/v1/files/{file_id}",
+        "description": "Delete a file",
+        "form_inputs": {
+          "file_id": "string"
+        }
+      },
+      "retrieve_file_information": {
+        "method": "GET",
+        "endpoint": "/v1/files/{file_id}",
+        "description": "Retrieve file information",
+        "form_inputs": {
+          "file_id": "string"
+        }
+      },
+      "retrieve_file_content": {
+        "method": "GET",
+        "endpoint": "/v1/files/{file_id}/content",
+        "description": "Retrieve file content",
+        "form_inputs": {
+          "file_id": "string"
+        }
+      }
+    },
+    "fine-tunes": {
+      "create_fine_tune_job": {
+        "method": "POST",
+        "endpoint": "/v1/fine-tunes",
+        "description": "Create a fine-tune job",
+        "form_inputs": {
+          "training_file": "string",
+          "validation_file": "string",
+          "model": "string",
+          "n_epochs": "integer"
+        }
+      },
+      "list_fine_tune_jobs": {
+        "method": "GET",
+        "endpoint": "/v1/fine-tunes",
+        "description": "List fine-tune jobs",
+        "form_inputs": {}
+      },
+      "retrieve_fine_tune_job_information": {
+        "method": "GET",
+        "endpoint": "/v1/fine-tunes/{fine_tune_id}",
+        "description": "Retrieve fine-tune job information",
+        "form_inputs": {
+          "fine_tune_id": "string"
+        }
+      },
+      "cancel_fine_tune_job": {
+        "method": "POST",
+        "endpoint": "/v1/fine-tunes/{fine_tune_id}/cancel",
+        "description": "Cancel a fine-tune job",
+        "form_inputs": {
+          "fine_tune_id": "string"
+        }
+      },
+      "list_fine_tune_events": {
+        "method": "GET",
+        "endpoint": "/v1/fine-tunes/{fine_tune_id}/events",
+        "description": "List fine-tune events",
+        "form_inputs": {
+          "fine_tune_id": "string"
+        }
+      }
+    },
+    "moderations": {
+      "create_moderation": {
+        "method": "POST",
+        "endpoint": "/v1/moderations",
+        "description": "Create a moderation",
+        "form_inputs": {
+          "input": "string"
+        }
+      }
+    },
+    "engines": {
+      "list_available_engines": {
+        "method": "GET",
+        "endpoint": "/v1/engines",
+        "description": "List available engines",
+        "form_inputs": {}
+      },
+      "retrieve_engine_information": {
+        "method": "GET",
+        "endpoint": "/v1/engines/{engine_id}",
+        "description": "Retrieve engine information",
+        "form_inputs": {
+          "engine_id": "string"
+        }
+      }
+    },
+    "search": {
+      "perform_search": {
+        "method": "POST",
+        "endpoint": "/v1/engines/{engine_id}/search",
+        "description": "Perform a search",
+        "form_inputs": {
+          "documents": "array",
+          "query": "string"
+        }
+      }
+    },
+    "classifications": {
+      "create_classification": {
+        "method": "POST",
+        "endpoint": "/v1/classifications",
+        "description": "Create a classification",
+        "form_inputs": {
+          "model": "string",
+          "query": "string",
+          "examples": "array"
+        }
+      }
+    },
+    "answers": {
+      "create_answer": {
+        "method": "POST",
+        "endpoint": "/v1/answers",
+        "description": "Create an answer",
+        "form_inputs": {
+          "model": "string",
+          "question": "string",
+          "examples": "array",
+          "examples_context": "string"
+        }
+      }
+    },
+    "davinci": {
+      "create_davinci_completion": {
+        "method": "POST",
+        "endpoint": "/v1/engines/davinci/completions",
+        "description": "Create a completion with the Davinci engine",
+        "form_inputs": {
+          "prompt": "string",
+          "max_tokens": "integer",
+          "temperature": "float"
+        }
+      }
+    },
+    "curie": {
+      "create_curie_completion": {
+        "method": "POST",
+        "endpoint": "/v1/engines/curie/completions",
+        "description": "Create a completion with the Curie engine",
+        "form_inputs": {
+          "prompt": "string",
+          "max_tokens": "integer",
+          "temperature": "float"
+        }
+      }
+    },
+    "babbage": {
+      "create_babbage_completion": {
+        "method": "POST",
+        "endpoint": "/v1/engines/babbage/completions",
+        "description": "Create a completion with the Babbage engine",
+        "form_inputs": {
+          "prompt": "string",
+          "max_tokens": "integer",
+          "temperature": "float"
+        }
+      }
+    },
+    "ada": {
+      "create_ada_completion": {
+        "method": "POST",
+        "endpoint": "/v1/engines/ada/completions",
+        "description": "Create a completion with the Ada engine",
+        "form_inputs": {
+          "prompt": "string",
+          "max_tokens": "integer",
+          "temperature": "float"
+        }
+      }
+    },
+    "content-filter": {
+      "create_content_filter_completion": {
+        "method": "POST",
+        "endpoint": "/v1/engines/content-filter-alpha/completions",
+        "description": "Create a content filter completion",
+        "form_inputs": {
+          "prompt": "string",
+          "max_tokens": "integer",
+          "temperature": "float"
+        }
+      }
+    }
+  }
+}

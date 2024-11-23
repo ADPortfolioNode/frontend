@@ -1,0 +1,97 @@
+.concierge-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.concierge {
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 20px;
+}
+
+.concierge h2 {
+  margin-top: 0;
+}
+
+.concierge form {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.concierge input[type="text"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.concierge button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.concierge button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.concierge .status-indicator {
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+.concierge .response {
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+.concierge .response h3 {
+  margin-top: 0;
+}
+
+.concierge .response p {
+  margin-top: 10px;
+  color: #666;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+input, button {
+  margin-bottom: 10px;
+}
+
+.status-indicator {
+  margin-top: 10px;
+}
+
+@media (min-width: 768px) {
+  .concierge-container {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .concierge {
+    margin-right: 20px;
+  }
+}

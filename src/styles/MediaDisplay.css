@@ -1,71 +1,68 @@
-/* Card styles */
-.card {
-  border: none;
-  border-radius: 0.25rem;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-  margin-bottom: 1rem;
+/* Ensure the body and html take up the full height */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: url('http://localhost:5000/images/generated_image.png') no-repeat center center fixed;
+  background-size: cover;
 }
 
-.card-body {
-  padding: 1.25rem;
+/* Container for the media display */
+.media-container { 
+  transition: opacity 0.5s ease-in-out;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.card-title {
-  margin-bottom: 1rem;
-  font-size: 1.25rem;
-  font-weight: bold;
+/* Media elements hidden by default */
+.media-container img,
+.media-container audio,
+.media-container video {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
 }
 
-.card-text {
-  margin-bottom: 1rem;
+/* Media elements visible with transition */
+.media-container img.visible,
+.media-container audio.visible,
+.media-container video.visible {
+  display: block;
+  opacity: 1;
 }
 
-/* Media styles */
-.img-fluid {
-  max-width: 100%;
-  height: auto;
+/* Response text hidden by default */
+.response-text {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
 }
 
-video {
-  width: 100%;
-  height: auto;
+/* Response text visible with transition */
+.response-text.visible {
+  opacity: 1;
 }
 
-/* Animation */
-.fade-in {
-  animation: fadeIn 0.5s ease-out;
+/* Hide elements with the hidden class */
+.hidden {
+  display: none;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+.media-display {
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
 }
 
-/* Responsive styles */
-@media (min-width: 992px) {
-  .card {
-    height: calc(100% - 2rem);
-  }
-}
-
-.fade-in {
-  animation: fadeIn 1.5s;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.card-img {
-  max-height: 300px;
-  object-fit: contain;
-}
-
-audio, video {
-  width: 100%;
+.loading-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
 }

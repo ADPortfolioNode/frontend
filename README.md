@@ -1,4 +1,6 @@
- # FrontEnd Project - Full Stack OpenAI
+# Full Stack OpenAI Project
+
+This project is a full-stack application that leverages OpenAI's API for various functionalities. It includes both frontend and backend components.
 
 ## Project Overview
 This project is part of the 2024 RESET initiative and focuses on building a front-end application using OpenAI technologies. The goal is to create a responsive and interactive user interface that leverages AI capabilities.
@@ -9,6 +11,8 @@ This project is part of the 2024 RESET initiative and focuses on building a fron
 - [Features](#features)
 - [Contributing](#contributing)
 - [License](#license)
+
+## Project Structure
 
 ## Installation
 To get started with this project, clone the repository and install the necessary dependencies:
