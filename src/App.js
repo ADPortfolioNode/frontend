@@ -5,6 +5,7 @@ import InteractivePanel from './components/InteractivePanel';
 import Concierge from './components/Concierge';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
+import io from 'socket.io-client';
 
 const REACT_APP_API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
 const REACT_APP_OPENAI_API_KEY = process.env.REACT_APP_OPENAI_API_KEY;
@@ -20,6 +21,7 @@ const App = () => {
   const [selectedEndpoint, setSelectedEndpoint] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
+  const [socket, setSocket] = useState(null);
 
   const toggleNav = () => {
     setIsNavOpen(!isNavOpen);
@@ -56,6 +58,23 @@ const App = () => {
     fetchData();
   }, [selectedEndpoint]);
 
+  useEffect(() => {
+    const socketInstance = io('http://localhost:3000'); // Adjust the URL as needed
+    setSocket(socketInstance);
+
+    socketInstance.on('connect', () => {
+      console.log('Connected to WebSocket server');
+    });
+
+    socketInstance.on('response', (data) => {
+      setResponse(data);
+    });
+
+    return () => {
+      socketInstance.disconnect();
+    };
+  }, []);
+
   return (
     <div className="App container-fluid" style={{ width: '98%' }}>
       <div className="grid-container">
@@ -78,7 +97,7 @@ const App = () => {
           />
         </div>
         <div className="grid-item display-area">
-          <DisplayArea response={response} />
+          <DisplayArea response={response} socket={socket} />
         </div>
       </div>
       <button onClick={toggleNav} className="nav-toggle-btn">

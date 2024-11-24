@@ -1,7 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-const DisplayArea = ({ response }) => {
+const DisplayArea = ({ response, socket }) => {
+    const [socketResponse, setSocketResponse] = useState(null);
+
+    useEffect(() => {
+        if (socket) {
+            socket.on('response', (data) => {
+                setSocketResponse(data);
+            });
+
+            return () => {
+                socket.off('response');
+            };
+        }
+    }, [socket]);
+
     return (
         <div className="display-area">
             <h3>Response Message:</h3>
@@ -19,6 +33,12 @@ const DisplayArea = ({ response }) => {
                     )}
                 </div>
             )}
+            {socketResponse && (
+                <div>
+                    <h3>Socket Response:</h3>
+                    <p>{socketResponse.message}</p>
+                </div>
+            )}
         </div>
     );
 };
@@ -28,6 +48,7 @@ DisplayArea.propTypes = {
         message: PropTypes.string.isRequired,
         savedpath: PropTypes.string,
     }).isRequired,
+    socket: PropTypes.object,
 };
 
 export default DisplayArea;
