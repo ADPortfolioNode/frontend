@@ -1,14 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import DisplayArea from './DisplayArea';
+import { io } from 'socket.io-client';
 import '../styles/Concierge.css';
 
-const Concierge = ({ socket, onTaskSubmit, onResponse, loading, status, welcomeMessage }) => {
+const REACT_APP_API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
+const REACT_APP_OPENAI_API_KEY = process.env.REACT_APP_OPENAI_API_KEY;
+
+const Concierge = ({ onTaskSubmit, onResponse, loading, status, welcomeMessage }) => {
   const [task, setTask] = useState('');
   const [response, setResponse] = useState({ message: '', savedpath: '' });
 
   useEffect(() => {
-    if (!socket) return;
+    const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+    const socketUrl = `${protocol}://${new URL(REACT_APP_API_BASE_URL).host}`;
+    const socket = io(socketUrl, {
+      transports: ['websocket'],
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+      timeout: 20000,
+    });
 
     const handleTaskResult = (data) => {
       setResponse(data);
@@ -19,23 +29,29 @@ const Concierge = ({ socket, onTaskSubmit, onResponse, loading, status, welcomeM
       onResponse(data);
     };
 
+    socket.on('connect_error', (error) => {
+      console.error('WebSocket connection error:', error);
+    });
+
     socket.on('taskResult', handleTaskResult);
-    socket.on('response', handleResponse);
+    socket.on('conciergeResponse', handleResponse);
 
     return () => {
       socket.off('taskResult', handleTaskResult);
-      socket.off('response', handleResponse);
+      socket.off('conciergeResponse', handleResponse);
+      socket.close();
     };
-  }, [socket, task, onTaskSubmit, onResponse]);
+  }, [task, onTaskSubmit, onResponse]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch('http://localhost:5000/api/assistant', {
+    fetch(`${REACT_APP_API_BASE_URL}/concierge`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${REACT_APP_OPENAI_API_KEY}`,
       },
-      body: JSON.stringify({ task }),
+      body: JSON.stringify({ message: task }),
     })
       .then((res) => {
         if (!res.ok) {
@@ -83,14 +99,12 @@ const Concierge = ({ socket, onTaskSubmit, onResponse, loading, status, welcomeM
             )}
           </div>
         )}
-        <DisplayArea response={response.message} savedpath={response.savedpath} />
       </div>
     </div>
   );
 };
 
 Concierge.propTypes = {
-  socket: PropTypes.object,
   onTaskSubmit: PropTypes.func.isRequired,
   onResponse: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
