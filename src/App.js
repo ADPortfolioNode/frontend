@@ -17,7 +17,7 @@ if (!REACT_APP_OPENAI_API_KEY) {
 }
 
 const App = () => {
-  const [response, setResponse] = useState({ message: '', savedpath: '' });
+  const [response, setResponse] = useState({ message: '', savedPath: '' });
   const [selectedEndpoint, setSelectedEndpoint] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -103,7 +103,14 @@ const App = () => {
       <button onClick={toggleNav} className="nav-toggle-btn">
         {isNavOpen ? 'Close Navigation' : 'Open Navigation'}
       </button>
+      {/* Comment out the response window */}
+      {/* <div className="response-window">
+          {response && <p>{response}</p>}
+      </div> */}
+  );
+        {response.savedPath && <audio controls src={response.savedPath}></audio>}
     </div>
+
   );
 };
 
