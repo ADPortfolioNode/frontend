@@ -55,8 +55,6 @@
 
 .display-area {
   grid-area: display-area;
-  background-color: #f1f1f1;
-  opacity: 50%; 
 }
 
 @media (min-width: 576px) {
@@ -102,4 +100,35 @@
 .loading {
   text-align: center;
   margin-top: 20px;
+}
+
+.main-thread-status {
+  margin-top: 20px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.main-thread-status h3 {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+
+.main-thread-status .status-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.main-thread-status .status-info p {
+  margin: 0;
+  flex: 1 1 200px;
+}
+
+.main-thread-status .message-thread {
+  margin-top: 10px;
+  border: 1px solid #ddd;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
 }

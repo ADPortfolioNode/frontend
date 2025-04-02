@@ -65,9 +65,9 @@ const ContentArea = () => {
   };
 
   return (
-    <div className="content-area">
+    <div className="content-area white-background">
       <DisplayArea response={response} />
-      <Chat />
+      
       <div className="concierge-container">
         <div className="concierge">
           <h2>Concierge Assistant</h2>

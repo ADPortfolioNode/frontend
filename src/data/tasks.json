@@ -1,0 +1,68 @@
+{
+  "tasks": {
+    "Text Operations": [
+      {
+        "name": "Chat",
+        "endpoint": "/api/chat",
+        "method": "POST",
+        "formInputs": {
+          "message": "Enter your message"
+        }
+      },
+      {
+        "name": "Summarization",
+        "endpoint": "/api/summarize",
+        "method": "POST",
+        "formInputs": {
+          "text": "Enter text to summarize"
+        }
+      }
+    ],
+    "Image Operations": [
+      {
+        "name": "Image Generation",
+        "endpoint": "/api/image",
+        "method": "POST",
+        "formInputs": {
+          "prompt": "Enter image description"
+        }
+      }
+    ],
+    "Audio Operations": [
+      {
+        "name": "Audio Transcription",
+        "endpoint": "/api/transcribe",
+        "method": "POST",
+        "formInputs": {
+          "file": "Upload audio file"
+        }
+      },
+      {
+        "name": "Audio Translation",
+        "endpoint": "/api/translate",
+        "method": "POST",
+        "formInputs": {
+          "file": "Upload audio file"
+        }
+      }
+    ],
+    "ChromaDB Operations": [
+      {
+        "name": "Retrieve from ChromaDB",
+        "endpoint": "/api/chromadb/retrieve",
+        "method": "POST",
+        "formInputs": {
+          "query": "Enter your query"
+        }
+      },
+      {
+        "name": "Store in ChromaDB",
+        "endpoint": "/api/chromadb/store",
+        "method": "POST",
+        "formInputs": {
+          "documents": "Enter documents to store"
+        }
+      }
+    ]
+  }
+}

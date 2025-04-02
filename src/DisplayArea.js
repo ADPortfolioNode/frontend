@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import MediaDisplay from './MediaDisplay';
-import ChatInterface from './ChatInterface';
 
-const DisplayArea = ({ response, setResponse, loading, setLoading }) => {
+const DisplayArea = ({ response, loading, setLoading }) => {
   const [mainThreadStatus, setMainThreadStatus] = useState({});
 
   useEffect(() => {
@@ -25,25 +24,16 @@ const DisplayArea = ({ response, setResponse, loading, setLoading }) => {
 
   return (
     <div className="display-area" style={{ width: '100%', margin: '0 auto' }}>
-      <div className="response-and-chat">
-        <div className="response-section">
-          {loading ? (
-            <div className="loading-spinner">Loading...</div>
-          ) : (
-            <MediaDisplay 
-              response={response}
-              isLoading={loading}
-              error={null}
-            />
-          )}
-        </div>
-        <div className="chat-section">
-          <ChatInterface 
-            setResponse={setResponse} 
-            loading={loading} 
-            setLoading={setLoading} 
+      <div className="response-section">
+        {loading ? (
+          <div className="loading-spinner">Loading...</div>
+        ) : (
+          <MediaDisplay
+            response={response}
+            isLoading={loading}
+            error={null}
           />
-        </div>
+        )}
       </div>
       <div className="main-thread-status">
         <h3>Main Thread Status:</h3>
@@ -62,7 +52,6 @@ DisplayArea.propTypes = {
     message: PropTypes.string,
     savedpath: PropTypes.string,
   }),
-  setResponse: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
   setLoading: PropTypes.func.isRequired,
 };

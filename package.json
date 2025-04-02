@@ -30,14 +30,18 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "fix-eslint": "npm dedupe && npm install eslint@^8.0.0",
+    "update-browserslist": "npx update-browserslist-db@latest"
   },
   "proxy": "http://localhost:5000",
   "eslintConfig": {
     "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+      "react-app"
+    ],
+    "rules": {
+      "react/react-in-jsx-scope": "off"
+    }
   },
   "browserslist": {
     "production": [
@@ -73,5 +77,8 @@
     "interactions"
   ],
   "author": "Deoism",
-  "license": "ISC"
+  "license": "ISC",
+  "resolutions": {
+    "eslint-config-react-app": "^5.0.1"
+  }
 }

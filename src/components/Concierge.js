@@ -1,104 +1,88 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import '../styles/Concierge.css';
 
 const REACT_APP_API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
-const REACT_APP_OPENAI_API_KEY = process.env.REACT_APP_OPENAI_API_KEY;
 
-const Concierge = ({ onTaskSubmit, onResponse, loading, status, welcomeMessage }) => {
+const Concierge = ({ onTaskSubmit, onResponse, loading, status }) => {
   const [task, setTask] = useState('');
-  const [response, setResponse] = useState({ message: '', savedpath: '' });
+  const [threads, setThreads] = useState([{ id: 'main', name: 'Main Thread', graphic: '' }]);
+  const [socket, setSocket] = useState(null);
+  const [buttonColor, setButtonColor] = useState('btn-primary');
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
-    const socketUrl = `${protocol}://${new URL(REACT_APP_API_BASE_URL).host}`;
-    const socket = io(socketUrl, {
-      transports: ['websocket'],
-      reconnectionAttempts: 5,
-      reconnectionDelay: 1000,
-      timeout: 20000,
+    const socketInstance = io(REACT_APP_API_BASE_URL, { path: '/socket.io' });
+    setSocket(socketInstance);
+
+    socketInstance.on('threadUpdate', (updatedThread) => {
+      setThreads((prevThreads) =>
+        prevThreads.map((thread) =>
+          thread.id === updatedThread.id ? { ...thread, graphic: updatedThread.graphic } : thread
+        )
+      );
+      if (updatedThread.id === 'main') {
+        setButtonColor('btn-danger'); // Change button color on update
+      }
+      console.log('Thread updated:', updatedThread);
     });
-
-    const handleTaskResult = (data) => {
-      setResponse(data);
-      onTaskSubmit(task, data.success);
-    };
-    const handleResponse = (data) => {
-      setResponse(data);
-      onResponse(data);
-    };
-
-    socket.on('connect_error', (error) => {
-      console.error('WebSocket connection error:', error);
-    });
-
-    socket.on('taskResult', handleTaskResult);
-    socket.on('conciergeResponse', handleResponse);
 
     return () => {
-      socket.off('taskResult', handleTaskResult);
-      socket.off('conciergeResponse', handleResponse);
-      socket.close();
+      socketInstance.disconnect();
     };
-  }, [task, onTaskSubmit, onResponse]);
+  }, []);
 
-  const handleSubmit = (e) => {
+  const handleTaskSubmit = async (e) => {
     e.preventDefault();
-    fetch(`${REACT_APP_API_BASE_URL}/concierge`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${REACT_APP_OPENAI_API_KEY}`,
-      },
-      body: JSON.stringify({ message: task }),
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setResponse(data);
-        onTaskSubmit(task, data.success);
-      })
-      .catch((err) => console.error('Error submitting task:', err));
+    if (!task.trim()) return;
+
+    const newThread = { id: `thread-${Date.now()}`, name: `Task: ${task}`, graphic: '' };
+    setThreads((prevThreads) => [...prevThreads, newThread]);
+
+    socket.emit('submitTask', { task, threadId: newThread.id });
+    setTask('');
   };
 
-  if (loading) {
-    return <div><img src={'http://localhost:5000/images/yinyang.gif'} alt="loading..." /></div>;
-  }
+  const handleButtonClick = () => {
+    setButtonColor('btn-primary'); // Reset button color
+    navigate('/assistants');
+  };
+
+  const renderThreads = () =>
+    threads.map((thread) => (
+      <div key={thread.id} className="thread">
+        <h4>{thread.name}</h4>
+        <div className="thread-graphic" dangerouslySetInnerHTML={{ __html: thread.graphic }} />
+      </div>
+    ));
 
   return (
     <div className="concierge-container">
-      <div className="concierge">
-        <h2>Concierge Assistant</h2>
-        {welcomeMessage && <p>{welcomeMessage}</p>}
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            value={task}
-            onChange={(e) => setTask(e.target.value)}
-            placeholder="Enter task"
-          />
-          <button type="submit">Submit Task</button>
-        </form>
-        <div className={`status-indicator ${status.status}`}>
-          {status.label}
-        </div>
-        {response.message && (
-          <div className="response">
-            <h3>Response</h3>
-            <p>{response.message}</p>
-            {response.savedpath && (
-              <>
-                <h4>Saved Path</h4>
-                <p>{response.savedpath}</p>
-              </>
-            )}
-          </div>
-        )}
+      <h2>Concierge</h2>
+      <form onSubmit={handleTaskSubmit}>
+        <input
+          type="text"
+          value={task}
+          onChange={(e) => setTask(e.target.value)}
+          placeholder="Enter a task"
+          className="form-control"
+        />
+        <button type="submit" className="btn btn-primary mt-2" disabled={loading}>
+          {loading ? 'Submitting...' : 'Submit Task'}
+        </button>
+      </form>
+      <button
+        className={`btn ${buttonColor} mt-3`}
+        onClick={handleButtonClick}
+        disabled={loading}
+      >
+        View Threads
+      </button>
+      <div className="threads-container">{renderThreads()}</div>
+      <div className={`status-indicator ${status.status}`}>
+        {status.label}
       </div>
     </div>
   );
@@ -109,7 +93,6 @@ Concierge.propTypes = {
   onResponse: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
   status: PropTypes.object.isRequired,
-  welcomeMessage: PropTypes.string.isRequired,
 };
 
 export default Concierge;

@@ -3,10 +3,17 @@
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #000; /* Sleek black background */
+  color: #fff; /* White text for contrast */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   border: 1px solid #ddd;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.interactive-panel:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
 }
 
 @media (min-width: 768px) {
@@ -15,41 +22,77 @@
   }
 }
 
+.interactive-panel-title {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: #0ff; /* Neon blue highlight */
+  text-shadow: 0 0 5px #0ff;
+}
+
+.interactive-panel-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
 .interactive-panel .form-group {
   margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
 }
 
 .interactive-panel .form-group label {
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
+  color: #0ff; /* Neon blue highlight */
 }
 
 .interactive-panel .form-group input {
   width: 100%;
   padding: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid #333;
   border-radius: 4px;
+  background-color: #111;
+  color: #fff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .interactive-panel .form-control {
   border-radius: 4px;
   padding: 10px;
+  background-color: #111;
+  color: #fff;
+  border: 1px solid #333;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.interactive-panel .form-control:focus {
+  border-color: #0ff;
+  box-shadow: 0 0 5px #0ff;
+  outline: none;
 }
 
 .interactive-panel .btn {
   width: 100%;
   padding: 10px;
-  background-color: #007bff;
-  color: #fff;
+  background-color: #0ff; /* Neon blue */
+  color: #000; /* Black text for contrast */
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.interactive-panel .btn:hover {
+  background-color: #00e6e6;
+  transform: scale(1.05);
 }
 
 .interactive-panel .btn:disabled {
-  background-color: #ccc;
+  background-color: #555;
   cursor: not-allowed;
 }
 
@@ -68,6 +111,12 @@
 .interactive-panel .response pre {
   white-space: pre-wrap;
   word-wrap: break-word;
+}
+
+.interactive-panel-placeholder {
+  color: #888;
+  font-style: italic;
+  text-align: center;
 }
 
 .relative-header {

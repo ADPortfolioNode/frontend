@@ -1,116 +1,57 @@
-import React, { useEffect, useState } from 'react';
-import Navigation from './components/Navigation';
-import DisplayArea from './components/DisplayArea';
-import InteractivePanel from './components/InteractivePanel';
-import Concierge from './components/Concierge';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import NavigationBar from './components/NavigationBar';
+import Footer from './components/Footer';
+import Header from './components/Header';
+import Home from './pages/Home';
+import Search from './pages/Search';
+import About from './pages/About';
+import Chat from './pages/Chat';
+import Assistants from './pages/Assistants';
+import ErrorBoundary from './components/ErrorBoundary';
+import './styles/App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css';
-import io from 'socket.io-client';
-
-const REACT_APP_API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
-const REACT_APP_OPENAI_API_KEY = process.env.REACT_APP_OPENAI_API_KEY;
-
-if (!REACT_APP_OPENAI_API_KEY) {
-  console.error('REACT_APP_OPENAI_API_KEY is not defined. Please set it in your environment variables.');
-} else {
-  console.log(`Using OpenAI API Key: ${REACT_APP_OPENAI_API_KEY}`);
-}
 
 const App = () => {
-  const [response, setResponse] = useState({ message: '', savedPath: '' });
-  const [selectedEndpoint, setSelectedEndpoint] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [isNavOpen, setIsNavOpen] = useState(false);
-  const [socket, setSocket] = useState(null);
-
-  const toggleNav = () => {
-    setIsNavOpen(!isNavOpen);
-  };
-
-  useEffect(() => {
-    const fetchInitialData = async () => {
-      try {
-        const res = await fetch(`${REACT_APP_API_BASE_URL}/`);
-        const data = await res.json();
-        setResponse(data);
-      } catch (error) {
-        console.error('Error fetching initial data:', error);
-      }
-    };
-    fetchInitialData();
-  }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!selectedEndpoint) return;
-      try {
-        const res = await fetch(`${REACT_APP_API_BASE_URL}/api/endpoint`);
-        const data = await res.json();
-        if (data && data.openai_api && data.openai_api[selectedEndpoint]) {
-          return data.openai_api[selectedEndpoint];
-        } else {
-          console.error('Selected endpoint not found in data:', selectedEndpoint);
-        }
-      } catch (error) {
-        console.error('Error fetching form data:', error);
-      }
-    };
-    fetchData();
-  }, [selectedEndpoint]);
-
-  useEffect(() => {
-    const socketInstance = io('http://localhost:3000'); // Adjust the URL as needed
-    setSocket(socketInstance);
-
-    socketInstance.on('connect', () => {
-      console.log('Connected to WebSocket server');
-    });
-
-    socketInstance.on('response', (data) => {
-      setResponse(data);
-    });
-
-    return () => {
-      socketInstance.disconnect();
-    };
-  }, []);
+  const [threads] = useState([{ id: 'main', name: 'Main Thread', messages: [] }]);
+  const [selectedEndpoint, setSelectedEndpoint] = useState(null);
+  const [response, setResponse] = useState({ message: '', savedpath: '' }); // Add response state
 
   return (
-    <div className="App container-fluid" style={{ width: '98%' }}>
-      <div className="grid-container">
-        <div className={`grid-item navigation ${isNavOpen ? 'open' : ''}`}>
-          <Navigation setSelectedEndpoint={setSelectedEndpoint} />
+    <Router>
+      <ErrorBoundary>
+        <div className="App">
+          <Header />
+          <NavigationBar setSelectedEndpoint={setSelectedEndpoint} />
+          <div className="container main-content">
+            <div className="row">
+              <div className="col-md-12">
+                <Routes>
+                  <Route
+                    path="/"
+                    element={
+                      <Home
+                        loading={loading}
+                        setLoading={setLoading}
+                        selectedEndpoint={selectedEndpoint}
+                        response={response} // Pass response to Home
+                        setResponse={setResponse} // Pass setResponse to Home
+                      />
+                    }
+                  />
+                  <Route path="/search" element={<Search />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/chat" element={<Chat />} />
+                  <Route path="/assistants" element={<Assistants threads={threads} />} />
+                </Routes>
+              </div>
+            </div>
+          </div>
+          <Footer />
         </div>
-        <div className="grid-item interactive-panel">
-          <Concierge
-            onTaskSubmit={(task, success) => console.log(`Task submitted: ${task}, success: ${success}`)}
-            onResponse={(data) => setResponse(data)}
-            loading={loading}
-            status={{ status: 'idle', label: 'Idle' }}
-            welcomeMessage="Welcome to the Concierge Service!"
-          />
-          <InteractivePanel
-            selectedEndpoint={selectedEndpoint}
-            loading={loading}
-            setLoading={setLoading}
-            setResponse={setResponse}
-          />
-        </div>
-        <div className="grid-item display-area">
-          <DisplayArea response={response} socket={socket} />
-        </div>
-      </div>
-      <button onClick={toggleNav} className="nav-toggle-btn">
-        {isNavOpen ? 'Close Navigation' : 'Open Navigation'}
-      </button>
-      {/* Comment out the response window */}
-      {/* <div className="response-window">
-          {response && <p>{response}</p>}
-      </div> */}
-  );
-        {response.savedPath && <audio controls src={response.savedPath}></audio>}
-    </div>
-
+      </ErrorBoundary>
+    </Router>
   );
 };
 

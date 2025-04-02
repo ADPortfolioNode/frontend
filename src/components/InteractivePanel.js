@@ -1,110 +1,145 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { io } from 'socket.io-client';
 import '../styles/InteractivePanel.css';
 
 const REACT_APP_API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
-const REACT_APP_OPENAI_API_KEY = process.env.REACT_APP_OPENAI_API_KEY;
 
 const InteractivePanel = ({ selectedEndpoint, loading, setLoading, setResponse }) => {
   const [formInputs, setFormInputs] = useState({});
   const [formValues, setFormValues] = useState({});
+  const [file, setFile] = useState(null);
+  const [endpoints, setEndpoints] = useState([]);
+  const [error, setError] = useState(''); // Add error state
 
   useEffect(() => {
-    if (selectedEndpoint && selectedEndpoint.form_inputs) {
-      setFormInputs(selectedEndpoint.form_inputs);
-      
-      const initialFormValues = Object.keys(selectedEndpoint.form_inputs).reduce((acc, key) => {
+    const fetchEndpoints = async () => {
+      try {
+        const res = await fetch(`${REACT_APP_API_BASE_URL}/api/openai.json`);
+        if (!res.ok) {
+          throw new Error('Failed to fetch endpoints');
+        }
+        const data = await res.json();
+        setEndpoints(data.endpoints);
+      } catch (err) {
+        console.error('Error fetching endpoints:', err);
+        setError('Failed to load endpoints.'); // Set error message
+      }
+    };
+
+    fetchEndpoints();
+  }, []);
+
+  useEffect(() => {
+    if (selectedEndpoint && selectedEndpoint.formInputs) {
+      setFormInputs(selectedEndpoint.formInputs);
+
+      const initialFormValues = Object.keys(selectedEndpoint.formInputs).reduce((acc, key) => {
         acc[key] = '';
         return acc;
       }, {});
-      initialFormValues.model = selectedEndpoint.model; // Set the model value
       setFormValues(initialFormValues);
+      setError(''); // Clear any previous errors
     }
   }, [selectedEndpoint]);
 
-  useEffect(() => {
-    const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
-    const socketUrl = `${protocol}://${new URL(REACT_APP_API_BASE_URL).host}`;
-    const socket = io(socketUrl, {
-      transports: ['websocket'],
-      reconnectionAttempts: 5,
-      reconnectionDelay: 1000,
-      timeout: 20000,
-    });
-
-    const handleTaskResult = (data) => {
-      setResponse(data);
-      setLoading(false);
-    };
-
-    socket.on('connect_error', (error) => {
-      console.error('WebSocket connection error:', error);
-    });
-
-    socket.on('taskResult', handleTaskResult);
-
-    return () => {
-      socket.off('taskResult', handleTaskResult);
-      socket.close();
-    };
-  }, [setResponse, setLoading]);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormValues({ ...formValues, [name]: value });
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    fetch(`${REACT_APP_API_BASE_URL}${selectedEndpoint.endpoint}`, {
-      method: selectedEndpoint.method,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${REACT_APP_OPENAI_API_KEY}`,
-      },
-      body: JSON.stringify(formValues),
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setResponse(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error('Error submitting task:', err);
-        setLoading(false);
+    setError(''); // Clear any previous errors
+    try {
+      const formData = new FormData();
+      Object.keys(formValues).forEach((key) => {
+        formData.append(key, formValues[key]);
       });
+      if (file) {
+        formData.append('file', file); // Use 'file' instead of 'documents'
+      }
+
+      const res = await fetch(`${REACT_APP_API_BASE_URL}${selectedEndpoint.path}`, {
+        method: selectedEndpoint.method,
+        body: formData,
+      });
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+
+      const data = await res.json();
+      setResponse(data);
+
+      // Clear form inputs
+      setFormValues({});
+      setFile(null);
+    } catch (err) {
+      console.error('Error submitting task:', err);
+      setError(`Error submitting task: ${err.message}`); // Set error message
+      setResponse({ message: '', savedpath: '' }); // Clear previous response
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (!selectedEndpoint) {
-    return <p>Please select an endpoint from the navigation menu.</p>;
+    return (
+      <div className="interactive-panel-placeholder w-100">
+        <h3>Select an Endpoint</h3>
+        <ul>
+          {endpoints.map((endpoint) => (
+            <li key={endpoint.path}>
+              <button
+                className="btn btn-link"
+                onClick={() => setFormInputs(endpoint.parameters)}
+              >
+                {endpoint.name}
+              </button>
+            </li>
+          ))}
+        </ul>
+        {error && <div className="alert alert-danger">{error}</div>} {/* Display error message */}
+      </div>
+    );
   }
 
   return (
-    <div className="interactive-panel">
-      <h2>{selectedEndpoint.description}</h2>
-      <form onSubmit={handleSubmit}>
+    <div className="interactive-panel w-100">
+      <h2 className="interactive-panel-title">{selectedEndpoint.name}</h2>
+      {error && <div className="alert alert-danger">{error}</div>} {/* Display error message */}
+      <form onSubmit={handleSubmit} className="row g-3">
         {Object.keys(formInputs).map((key) => (
-          <div key={key} className="form-group">
-            <label>{key}</label>
-            <input
-              type="text"
-              name={key}
-              value={formValues[key]}
-              onChange={handleInputChange}
-              className="form-control"
-            />
-          </div>
+          key === 'file' ? (
+            <div className="col-12" key={key}>
+              <label htmlFor={key} className="form-label">Upload File</label>
+              <input
+                type="file"
+                name={key}
+                onChange={handleFileChange}
+                className="form-control file-input"
+                id={key}
+              />
+            </div>
+          ) : (
+            <div className="col-12" key={key}>
+              <label htmlFor={key} className="form-label">{formInputs[key]}</label>
+              <input
+                type="text"
+                name={key}
+                value={formValues[key] || ''} // Handle undefined formValues
+                onChange={(e) => setFormValues({ ...formValues, [e.target.name]: e.target.value })}
+                className="form-control"
+                id={key}
+              />
+            </div>
+          )
         ))}
-        <button type="submit" className="btn btn-primary" disabled={loading}>
-          {loading ? 'Loading...' : 'Submit'}
-        </button>
+        <div className="col-12">
+          <button type="submit" className="btn btn-primary w-100" disabled={loading}>
+            {loading ? 'Processing...' : 'Submit'}
+          </button>
+        </div>
       </form>
     </div>
   );
